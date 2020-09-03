@@ -23,7 +23,7 @@ function displayEmployees(employeeData){
         const city = employee.location.city;
         let picture = employee.picture.medium;
         employeeHTML += `
-        <div class="card">
+        <div class="card" data-index="${index}">
                 <img src="${picture}" alt="${name}" class="avatar">
                 <div class="text">
                     <h2 class="name">${name.first} ${name.last}</h2>
@@ -47,7 +47,7 @@ function displayModal(index) {
         <p class="address">${city}</p>
         <hr />
         <p>${phone}</p>
-        <p class="address">${street}, ${state}, ${postcode}</p>
+        <p class="address">${street.number} ${street.name}, ${state}, ${postcode}</p>
         <p>Birthday: ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}</p>
     </div>
     `;
