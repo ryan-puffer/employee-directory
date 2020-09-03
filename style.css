@@ -6,6 +6,8 @@
 
 body {
     position: relative;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f0f0f0;
 }
 
 header {
@@ -34,8 +36,9 @@ header {
 .card {
     display: flex;
     width: 100%;
-    background-color: #eee;
+    background-color: #fff;
     border: 1px solid gray;
+    /* box-shadow: 20px 20px 10px 10px rgba(black, 1.0); */
     border-radius: 5px;
     margin: 1rem 0;
     padding: 1rem;
@@ -49,7 +52,7 @@ header {
 
 .text {
     margin-left: .5rem;
-    font-size: 70%;
+    font-size: 60%;
     margin-top: auto;
     margin-bottom: auto;
 }
@@ -79,7 +82,29 @@ header {
 	position: absolute;
 	right: 15px;
 	top: 5px;
-	cursor: pointer;
+    cursor: pointer;
+    border: none;
+    background-color: #fff;
+    font-weight: 600;
+}
+
+.avatar-modal {
+    width: 40%;
+}
+
+.text-container *:not(.name){
+    color: gray;
+    font-weight: 300;
+    line-height: 2;
+    font-size: 85%;
+}
+
+.city {
+    margin-bottom: 10px;
+}
+
+.phone {
+    margin-top: 10px;
 }
 
 .hidden {
@@ -111,7 +136,7 @@ header {
     }
 
     .text {
-        font-size: 100%;
+        font-size: 80%;
     }
 }
 

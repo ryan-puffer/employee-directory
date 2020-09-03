@@ -4,6 +4,7 @@ const directory = document.querySelector('#directory');
 const overlay = document.querySelector('.overlay');
 const modalContainer = document.querySelector('.modal-content');
 const modalClose = document.querySelector('.modal-close');
+const searchBar = document.querySelector('#search-employees');
 
 
 //fetch data from api
@@ -40,13 +41,13 @@ function displayModal(index) {
     let {name, dob, phone, email, location: {city, street, state, postcode}, picture} = employees[index];
     let date = new Date(dob.date);
     const modalHTML = `
-    <img class="avatar" src="${picture.large}" />
+    <img class="avatar avatar-modal" src="${picture.large}" />
     <div class="text-container">
         <h2 class="name">${name.first} ${name.last}</h2>
         <p class="email">${email}</p>
-        <p class="address">${city}</p>
+        <p class="city">${city}</p>
         <hr />
-        <p>${phone}</p>
+        <p class="phone">${phone}</p>
         <p class="address">${street.number} ${street.name}, ${state}, ${postcode}</p>
         <p>Birthday: ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}</p>
     </div>
@@ -64,8 +65,31 @@ directory.addEventListener('click', (e) => {
 
         displayModal(index);
     }
+   
 })
 
+//modal close
 modalClose.addEventListener('click', () => {
     overlay.classList.add('hidden');
 });
+
+overlay.addEventListener('click', (e) => {
+    if(!overlay.classList.contains('hidden') && e.target !== modalContainer){
+        overlay.classList.add('hidden')
+    }
+})
+
+//employee search
+searchBar.addEventListener('keyup', () => {
+    let searchValue = searchBar.value.toLowerCase();
+    const cardItems = document.querySelectorAll('.card');
+    for(let i = 0; i < cardItems.length; i++){
+        const getName = document.querySelectorAll('.name');
+        const fullName = getName[i].textContent.toLowerCase();
+        if(fullName.includes(searchValue)){
+            cardItems[i].style.display = 'flex';
+        } else {
+            cardItems[i].style.display = 'none';
+        }
+    }
+})
