@@ -1,18 +1,71 @@
+let employees = [];
+const urlAPI = 'https://randomuser.me/api/?results=12&inc=name,email,picture,dob,phone,location&noinfo&nat=US';
 const directory = document.querySelector('#directory');
+const overlay = document.querySelector('.overlay');
+const modalContainer = document.querySelector('.modal-content');
+const modalClose = document.querySelector('.modal-close');
 
-console.log(fetchData('https://randomuser.me/api/?inc=name,email,picture,dob,phone,location'));
 
-function fetchData(url) {
-	return fetch(url)
-		.then(checkStatus)
-		.then((res) => res.json())
-		.catch((error) => console.log('There was an error!', error));
+//fetch data from api
+//prettier-ignore
+fetch(urlAPI)
+    .then((res) => res.json())
+    .then(res => res.results)
+    .then(displayEmployees)
+    .catch(err => console.log(err))
+
+function displayEmployees(employeeData){
+    employees = employeeData;
+    let employeeHTML = '';
+    employees.forEach((employee, index) => {
+        const name = employee.name;
+        const email = employee.email;
+        const city = employee.location.city;
+        let picture = employee.picture.medium;
+        employeeHTML += `
+        <div class="card">
+                <img src="${picture}" alt="${name}" class="avatar">
+                <div class="text">
+                    <h2 class="name">${name.first} ${name.last}</h2>
+                    <p class="email">${email}</p>
+                    <p class="address">${city}</p>
+                </div>
+            </div>
+            `
+    });
+    directory.innerHTML = employeeHTML;
 }
 
-function checkStatus(response) {
-	if (response.ok) {
-		return Promise.resolve(response);
-	} else {
-		return Promise.reject(new Error(response.statusText));
-	}
+function displayModal(index) {
+    let {name, dob, phone, email, location: {city, street, state, postcode}, picture} = employees[index];
+    let date = new Date(dob.date);
+    const modalHTML = `
+    <img class="avatar" src="${picture.large}" />
+    <div class="text-container">
+        <h2 class="name">${name.first} ${name.last}</h2>
+        <p class="email">${email}</p>
+        <p class="address">${city}</p>
+        <hr />
+        <p>${phone}</p>
+        <p class="address">${street}, ${state}, ${postcode}</p>
+        <p>Birthday: ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}</p>
+    </div>
+    `;
+    overlay.classList.remove('hidden');
+    modalContainer.innerHTML = modalHTML;
 }
+
+directory.addEventListener('click', (e) => {
+    //make sure container is not clicked
+    if(e.target !== directory){
+        //select closest card and get index
+        const card = e.target.closest('.card');
+        const index = card.getAttribute('data-index');
+
+        displayModal(index);
+    }
+})
+
+modalClose.addEventListener('click', () => {
+    overlay.classList.add('hidden');
+});
