@@ -37,7 +37,7 @@ header {
 	width: 100%;
 	background-color: #fff;
 	border: 1px solid gray;
-	/* box-shadow: 20px 20px 10px 10px rgba(black, 1.0); */
+	box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
 	border-radius: 5px;
 	margin: 1rem 0;
 	padding: 1rem;
@@ -45,13 +45,15 @@ header {
 }
 
 .avatar {
-	height: inherit;
+	width: 125px;
 	border-radius: 50%;
+	object-fit: cover;
+	padding: .5rem;
 }
 
 .text {
 	margin-left: .5rem;
-	font-size: 60%;
+	font-size: 75%;
 	margin-top: auto;
 	margin-bottom: auto;
 }

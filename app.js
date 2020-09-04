@@ -25,7 +25,7 @@ function displayEmployees(employeeData) {
 		const name = employee.name;
 		const email = employee.email;
 		const city = employee.location.city;
-		let picture = employee.picture.medium;
+		let picture = employee.picture.large;
 		employeeHTML += `
         <div class="card" data-index="${index}">
                 <img src="${picture}" alt="${name}" class="avatar">
@@ -40,6 +40,7 @@ function displayEmployees(employeeData) {
 	directory.innerHTML = employeeHTML;
 }
 
+//when called with click listener, assign data from index in employees to variables and generate HTML
 function displayModal(index) {
 	let { name, dob, phone, email, location: { city, street, state, postcode }, picture } = employees[index];
 	let date = new Date(dob.date);
@@ -55,7 +56,9 @@ function displayModal(index) {
         <p>Birthday: ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}</p>
     </div>
     `;
+	//show modal
 	overlay.classList.remove('hidden');
+	//assign generated html
 	modalContainer.innerHTML = modalHTML;
 }
 
