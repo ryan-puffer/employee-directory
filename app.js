@@ -5,7 +5,10 @@ const overlay = document.querySelector('.overlay');
 const modalContainer = document.querySelector('.modal-content');
 const modalClose = document.querySelector('.modal-close');
 const searchBar = document.querySelector('#search-employees');
-
+//modal arrows
+const rightArrow = document.querySelector('.right');
+const leftArrow = document.querySelector('.left');
+let modalIndex;
 
 //fetch data from api
 //prettier-ignore
@@ -15,15 +18,15 @@ fetch(urlAPI)
     .then(displayEmployees)
     .catch(err => console.log(err))
 
-function displayEmployees(employeeData){
-    employees = employeeData;
-    let employeeHTML = '';
-    employees.forEach((employee, index) => {
-        const name = employee.name;
-        const email = employee.email;
-        const city = employee.location.city;
-        let picture = employee.picture.medium;
-        employeeHTML += `
+function displayEmployees(employeeData) {
+	employees = employeeData;
+	let employeeHTML = '';
+	employees.forEach((employee, index) => {
+		const name = employee.name;
+		const email = employee.email;
+		const city = employee.location.city;
+		let picture = employee.picture.medium;
+		employeeHTML += `
         <div class="card" data-index="${index}">
                 <img src="${picture}" alt="${name}" class="avatar">
                 <div class="text">
@@ -32,15 +35,15 @@ function displayEmployees(employeeData){
                     <p class="address">${city}</p>
                 </div>
             </div>
-            `
-    });
-    directory.innerHTML = employeeHTML;
+            `;
+	});
+	directory.innerHTML = employeeHTML;
 }
 
 function displayModal(index) {
-    let {name, dob, phone, email, location: {city, street, state, postcode}, picture} = employees[index];
-    let date = new Date(dob.date);
-    const modalHTML = `
+	let { name, dob, phone, email, location: { city, street, state, postcode }, picture } = employees[index];
+	let date = new Date(dob.date);
+	const modalHTML = `
     <img class="avatar avatar-modal" src="${picture.large}" />
     <div class="text-container">
         <h2 class="name">${name.first} ${name.last}</h2>
@@ -52,44 +55,69 @@ function displayModal(index) {
         <p>Birthday: ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}</p>
     </div>
     `;
-    overlay.classList.remove('hidden');
-    modalContainer.innerHTML = modalHTML;
+	overlay.classList.remove('hidden');
+	modalContainer.innerHTML = modalHTML;
 }
 
 directory.addEventListener('click', (e) => {
-    //make sure container is not clicked
-    if(e.target !== directory){
-        //select closest card and get index
-        const card = e.target.closest('.card');
-        const index = card.getAttribute('data-index');
-
-        displayModal(index);
-    }
-   
-})
+	//make sure container is not clicked
+	if (e.target !== directory) {
+		//select closest card and get index
+		const card = e.target.closest('.card');
+		const index = card.getAttribute('data-index');
+		modalIndex = index;
+		displayModal(index);
+	}
+});
 
 //modal close
 modalClose.addEventListener('click', () => {
-    overlay.classList.add('hidden');
+	overlay.classList.add('hidden');
 });
 
 overlay.addEventListener('click', (e) => {
-    if(!overlay.classList.contains('hidden') && e.target !== modalContainer){
-        overlay.classList.add('hidden')
-    }
-})
+	if (
+		!overlay.classList.contains('hidden') &&
+		e.target !== modalContainer &&
+		e.target !== rightArrow &&
+		e.target !== leftArrow
+	) {
+		overlay.classList.add('hidden');
+	}
+});
 
 //employee search
 searchBar.addEventListener('keyup', () => {
-    let searchValue = searchBar.value.toLowerCase();
-    const cardItems = document.querySelectorAll('.card');
-    for(let i = 0; i < cardItems.length; i++){
-        const getName = document.querySelectorAll('.name');
-        const fullName = getName[i].textContent.toLowerCase();
-        if(fullName.includes(searchValue)){
-            cardItems[i].style.display = 'flex';
-        } else {
-            cardItems[i].style.display = 'none';
-        }
-    }
-})
+	let searchValue = searchBar.value.toLowerCase();
+	const cardItems = document.querySelectorAll('.card');
+	for (let i = 0; i < cardItems.length; i++) {
+		const getName = document.querySelectorAll('.name');
+		const fullName = getName[i].textContent.toLowerCase();
+		if (fullName.includes(searchValue)) {
+			cardItems[i].style.display = 'flex';
+		} else {
+			cardItems[i].style.display = 'none';
+		}
+	}
+});
+
+//modal arrows
+rightArrow.addEventListener('click', () => {
+	if (modalIndex < 11) {
+		modalIndex++;
+		displayModal(modalIndex);
+	} else if (modalIndex === 11) {
+		modalIndex = 0;
+		displayModal(modalIndex);
+	}
+});
+
+leftArrow.addEventListener('click', () => {
+	if (modalIndex > 0) {
+		modalIndex--;
+		displayModal(modalIndex);
+	} else if (modalIndex === 0) {
+		modalIndex = 11;
+		displayModal(modalIndex);
+	}
+});
